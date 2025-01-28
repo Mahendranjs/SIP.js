@@ -1,6 +1,6 @@
 {
-  "name": "sip.js",
-  "title": "SIP.js",
+  "name": "SBNA-SIP",
+  "title": "@SBNA-SIP",
   "description": "A SIP library for JavaScript",
   "version": "0.21.2",
   "license": "MIT",
