@@ -58,3 +58,4 @@ export * from "./user-agent-delegate.js";
 export * from "./user-agent-options.js";
 export * from "./user-agent-state.js";
 export * from "./user-agent.js";
+export * from "../platform/React/AgentRegister.js";

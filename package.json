@@ -1,8 +1,9 @@
 {
-  "name": "SBNA-SIP",
-  "title": "@SBNA-SIP",
+  "name": "@sbna/sip",
+  "title": "@sbna/sip",
+  "private": false,
   "description": "A SIP library for JavaScript",
-  "version": "0.21.2",
+  "version": "0.0.6",
   "license": "MIT",
   "main": "./lib/index.js",
   "files": [
@@ -22,7 +23,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/onsip/SIP.js.git"
+    "url": "https://github.com/Mahendranjs/SBNA-SIPJS"
   },
   "keywords": [
     "sip",
@@ -102,6 +103,7 @@
     "extract-session-manager": "api-extractor run --local --verbose --config src/platform/web/session-manager/api-extractor.json",
     "extract-simple-user": "api-extractor run --local --verbose --config src/platform/web/simple-user/api-extractor.json",
     "extract-transport": "api-extractor run --local --verbose --config src/platform/web/transport/api-extractor.json",
+    "extract-react": "api-extractor run --local --verbose --config src/platform/React/api-extractor.json",
     "generate-grammar": "node build/grammarGenerator.cjs",
     "lint": "eslint --ext .ts .",
     "lint-fix": "eslint --ext .ts --fix .",
@@ -110,6 +112,7 @@
     "version": "sed -i '' \"s/LIBRARY_VERSION = .*/LIBRARY_VERSION = \\\"$npm_package_version\\\";/\" src/version.ts"
   },
   "dependencies": {
+    "@sbna/sip": "^0.0.3",
     "events": "^3.3.0"
   }
 }

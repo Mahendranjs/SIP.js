@@ -8,7 +8,7 @@ import { Inviter } from "../../api/inviter.js";
 import { SessionState } from "../../api/session-state.js";
 
 
-export class AgentRegister extends EventEmitter {
+export class AgentRegister {
   private userAgent: UserAgent | null = null;
   private registerer: Registerer | null = null;
   private Session: Session | null = null;
@@ -22,13 +22,12 @@ export class AgentRegister extends EventEmitter {
    * @param DisplayName - User Agent Display Name.
    */
 
-  constructor(
+  public constructor(
     SOCKET_URL: string,
     UserName: string,
     Password: string,
     DisplayName: string
   ) {
-    super();
     this.userAgent = new UserAgent({
       uri: UserAgent.makeURI(`sip:${UserName}@cfss.ccxai.in`),
       transportOptions: { server: SOCKET_URL },
@@ -77,7 +76,7 @@ export class AgentRegister extends EventEmitter {
     }
   }
 
-  async stop() {
+  public async stop() {
     if (this.registerer) {
       await this.registerer.unregister();
     }
@@ -87,7 +86,7 @@ export class AgentRegister extends EventEmitter {
     console.log("SIP Unregistered");
   }
 
-  async makeCall(
+  public async makeCall(
     target: string,
     toDisplayName: string,
     remoteVideoRef: HTMLVideoElement | null
@@ -125,7 +124,7 @@ export class AgentRegister extends EventEmitter {
   }
 
   // Accept an incoming invitation
-  async acceptInvitation(
+  public async acceptInvitation(
     invitation: Invitation,
     remoteVideoRef: HTMLVideoElement | null
   ) {
