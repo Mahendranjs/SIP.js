@@ -165,5 +165,5 @@ export interface Transport extends CoreTransport {
    * ```
    * @param message - Message to send.
    */
-  send(message: string): Promise<void>;
+  send(message: string | object): Promise<void>;
 }

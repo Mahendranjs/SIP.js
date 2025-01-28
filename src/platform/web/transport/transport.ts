@@ -16,7 +16,7 @@ export class Transport implements TransportDefinition {
     connectionTimeout: 5,
     keepAliveInterval: 0,
     keepAliveDebounce: 10,
-    traceSip: true
+    traceSip: true,
   };
 
   public onConnect: (() => void) | undefined;
@@ -56,8 +56,10 @@ export class Transport implements TransportDefinition {
     if (options) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const optionsDeprecated: any = options;
-      const wsServersDeprecated: string | Array<string> | undefined = optionsDeprecated?.wsServers;
-      const maxReconnectionAttemptsDeprecated: number | undefined = optionsDeprecated?.maxReconnectionAttempts;
+      const wsServersDeprecated: string | Array<string> | undefined =
+        optionsDeprecated?.wsServers;
+      const maxReconnectionAttemptsDeprecated: number | undefined =
+        optionsDeprecated?.maxReconnectionAttempts;
       if (wsServersDeprecated !== undefined) {
         const deprecatedMessage =
           `The transport option "wsServers" as has apparently been specified and has been deprecated. ` +
@@ -86,7 +88,7 @@ export class Transport implements TransportDefinition {
       // start with the default option values
       ...Transport.defaultOptions,
       // apply any options passed in via the constructor
-      ...options
+      ...options,
     };
 
     // validate server URL
@@ -201,7 +203,9 @@ export class Transport implements TransportDefinition {
       case TransportState.Connecting:
         // If `state` is "Connecting", `state` MUST NOT transition before returning.
         if (this.transitioningState) {
-          return Promise.reject(this.transitionLoopDetectedError(TransportState.Connecting));
+          return Promise.reject(
+            this.transitionLoopDetectedError(TransportState.Connecting)
+          );
         }
         if (!this.connectPromise) {
           throw new Error("Connect promise must be defined.");
@@ -210,7 +214,9 @@ export class Transport implements TransportDefinition {
       case TransportState.Connected:
         // If `state` is "Connected", `state` MUST NOT transition before returning.
         if (this.transitioningState) {
-          return Promise.reject(this.transitionLoopDetectedError(TransportState.Connecting));
+          return Promise.reject(
+            this.transitionLoopDetectedError(TransportState.Connecting)
+          );
         }
         if (this.connectPromise) {
           throw new Error("Connect promise must not be defined.");
@@ -254,10 +260,16 @@ export class Transport implements TransportDefinition {
       // https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/WebSocket
       ws = new WebSocket(this.server, "sip");
       ws.binaryType = "arraybuffer"; // set data type of received binary messages
-      ws.addEventListener("close", (ev: CloseEvent) => this.onWebSocketClose(ev, ws));
-      ws.addEventListener("error", (ev: Event) => this.onWebSocketError(ev, ws));
+      ws.addEventListener("close", (ev: CloseEvent) =>
+        this.onWebSocketClose(ev, ws)
+      );
+      ws.addEventListener("error", (ev: Event) =>
+        this.onWebSocketError(ev, ws)
+      );
       ws.addEventListener("open", (ev: Event) => this.onWebSocketOpen(ev, ws));
-      ws.addEventListener("message", (ev: MessageEvent) => this.onWebSocketMessage(ev, ws));
+      ws.addEventListener("message", (ev: MessageEvent) =>
+        this.onWebSocketMessage(ev, ws)
+      );
       this._ws = ws;
     } catch (error) {
       this._ws = undefined;
@@ -324,7 +336,9 @@ export class Transport implements TransportDefinition {
       case TransportState.Disconnecting:
         // If `state` is "Disconnecting", `state` MUST NOT transition before returning.
         if (this.transitioningState) {
-          return Promise.reject(this.transitionLoopDetectedError(TransportState.Disconnecting));
+          return Promise.reject(
+            this.transitionLoopDetectedError(TransportState.Disconnecting)
+          );
         }
         if (!this.disconnectPromise) {
           throw new Error("Disconnect promise must be defined.");
@@ -333,7 +347,9 @@ export class Transport implements TransportDefinition {
       case TransportState.Disconnected:
         // If `state` is "Disconnected", `state` MUST NOT transition before returning.
         if (this.transitioningState) {
-          return Promise.reject(this.transitionLoopDetectedError(TransportState.Disconnecting));
+          return Promise.reject(
+            this.transitionLoopDetectedError(TransportState.Disconnecting)
+          );
         }
         if (this.disconnectPromise) {
           throw new Error("Disconnect promise must not be defined.");
@@ -368,7 +384,7 @@ export class Transport implements TransportDefinition {
     return this.disconnectPromise;
   }
 
-  private _send(message: string): Promise<void> {
+  private _send(message: string | object): Promise<void> {
     if (this.configuration.traceSip === true) {
       this.logger.log("Sending WebSocket message:\n\n" + message + "\n");
     }
@@ -445,7 +461,9 @@ export class Transport implements TransportDefinition {
     if (/^(\r\n)+$/.test(data)) {
       this.clearKeepAliveTimeout();
       if (this.configuration.traceSip === true) {
-        this.logger.log("Received WebSocket message with CRLF Keep Alive response");
+        this.logger.log(
+          "Received WebSocket message with CRLF Keep Alive response"
+        );
       }
       return;
     }
@@ -465,17 +483,23 @@ export class Transport implements TransportDefinition {
         // finishedData = String.fromCharCode.apply(null, (new Uint8Array(data) as unknown as Array<number>));
       } catch (err) {
         this.logger.error((err as Error).toString());
-        this.logger.error("Received WebSocket binary message failed to be converted into string, message discarded");
+        this.logger.error(
+          "Received WebSocket binary message failed to be converted into string, message discarded"
+        );
         return;
       }
       if (this.configuration.traceSip === true) {
-        this.logger.log("Received WebSocket binary message:\n\n" + finishedData + "\n");
+        this.logger.log(
+          "Received WebSocket binary message:\n\n" + finishedData + "\n"
+        );
       }
     } else {
       // WebSocket text message.
       finishedData = data;
       if (this.configuration.traceSip === true) {
-        this.logger.log("Received WebSocket text message:\n\n" + finishedData + "\n");
+        this.logger.log(
+          "Received WebSocket text message:\n\n" + finishedData + "\n"
+        );
       }
     }
 
@@ -527,7 +551,9 @@ export class Transport implements TransportDefinition {
    */
   private transitionState(newState: TransportState, error?: Error): void {
     const invalidTransition = (): Error => {
-      throw new Error(`Invalid state transition from ${this._state} to ${newState}`);
+      throw new Error(
+        `Invalid state transition from ${this._state} to ${newState}`
+      );
     };
 
     if (this.transitioningState) {
@@ -547,12 +573,18 @@ export class Transport implements TransportDefinition {
         }
         break;
       case TransportState.Connected:
-        if (newState !== TransportState.Disconnecting && newState !== TransportState.Disconnected) {
+        if (
+          newState !== TransportState.Disconnecting &&
+          newState !== TransportState.Disconnected
+        ) {
           invalidTransition();
         }
         break;
       case TransportState.Disconnecting:
-        if (newState !== TransportState.Connecting && newState !== TransportState.Disconnected) {
+        if (
+          newState !== TransportState.Connecting &&
+          newState !== TransportState.Disconnected
+        ) {
           invalidTransition();
         }
         break;
@@ -642,7 +674,9 @@ export class Transport implements TransportDefinition {
       if (!connectReject) {
         throw new Error("Connect reject undefined.");
       }
-      newState === TransportState.Connected ? connectResolve() : connectReject(error || new Error("Connect aborted."));
+      newState === TransportState.Connected
+        ? connectResolve()
+        : connectReject(error || new Error("Connect aborted."));
     }
 
     // Complete disconnect promise

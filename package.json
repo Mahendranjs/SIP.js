@@ -35,6 +35,7 @@
   "devDependencies": {
     "@microsoft/api-documenter": "^7.19.22",
     "@microsoft/api-extractor": "7.7.11",
+    "@types/events": "^3.0.3",
     "@types/jasmine": "^4.3.0",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
@@ -107,5 +108,8 @@
     "test": "npm run build-test && karma start karma.conf.cjs --reporters mocha --browsers ChromeHeadlessFakeMediaStream --single-run",
     "test-browser": "npm run build-test && sleep 2 && (open http://localhost:9876/debug.html &) && karma start karma.conf.cjs --reporters kjhtml --no-single-run",
     "version": "sed -i '' \"s/LIBRARY_VERSION = .*/LIBRARY_VERSION = \\\"$npm_package_version\\\";/\" src/version.ts"
+  },
+  "dependencies": {
+    "events": "^3.3.0"
   }
 }

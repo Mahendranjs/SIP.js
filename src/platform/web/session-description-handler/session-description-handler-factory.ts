@@ -7,12 +7,16 @@ import { SessionDescriptionHandlerFactoryOptions } from "./session-description-h
  * Factory for {@link SessionDescriptionHandler}.
  * @public
  */
-export interface SessionDescriptionHandlerFactory extends SessionDescriptionHandlerFactoryDefinition {
+export interface SessionDescriptionHandlerFactory
+  extends SessionDescriptionHandlerFactoryDefinition {
   /**
    * SessionDescriptionHandler factory function.
    * @remarks
    * The `options` are provided as part of the UserAgent configuration
    * and passed through on every call to SessionDescriptionHandlerFactory's constructor.
    */
-  (session: Session, options?: SessionDescriptionHandlerFactoryOptions): SessionDescriptionHandler;
+  (
+    session: Session,
+    options?: SessionDescriptionHandlerFactoryOptions
+  ): SessionDescriptionHandler;
 }

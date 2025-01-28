@@ -20,26 +20,41 @@ export function defaultSessionDescriptionHandlerFactory(
     sessionDescriptionHandler: SessionDescriptionHandler
   ) => Promise<MediaStream>
 ): SessionDescriptionHandlerFactory {
-  return (session: Session, options?: SessionDescriptionHandlerFactoryOptions): SessionDescriptionHandler => {
+  return (
+    session: Session,
+    options?: SessionDescriptionHandlerFactoryOptions
+  ): SessionDescriptionHandler => {
     // provide a default media stream factory if need be
+    console.log(session, options);
+    const UserAgentCore = session.outgoingRequestMessage?.options;
     if (mediaStreamFactory === undefined) {
-      mediaStreamFactory = defaultMediaStreamFactory();
+      mediaStreamFactory = defaultMediaStreamFactory({
+        UserAgentCore,
+      });
     }
 
     // make sure we allow `0` to be passed in so timeout can be disabled
-    const iceGatheringTimeout = options?.iceGatheringTimeout !== undefined ? options?.iceGatheringTimeout : 5000;
+    const iceGatheringTimeout =
+      options?.iceGatheringTimeout !== undefined
+        ? options?.iceGatheringTimeout
+        : 0;
 
     // merge passed factory options into default session description configuration
-    const sessionDescriptionHandlerConfiguration: SessionDescriptionHandlerConfiguration = {
-      iceGatheringTimeout,
-      peerConnectionConfiguration: {
-        ...defaultPeerConnectionConfiguration(),
-        ...options?.peerConnectionConfiguration
-      }
-    };
+    const sessionDescriptionHandlerConfiguration: SessionDescriptionHandlerConfiguration =
+      {
+        iceGatheringTimeout,
+        peerConnectionConfiguration: {
+          ...defaultPeerConnectionConfiguration(),
+          ...options?.peerConnectionConfiguration,
+        },
+      };
 
     const logger = session.userAgent.getLogger("sip.SessionDescriptionHandler");
 
-    return new SessionDescriptionHandler(logger, mediaStreamFactory, sessionDescriptionHandlerConfiguration);
+    return new SessionDescriptionHandler(
+      logger,
+      mediaStreamFactory,
+      sessionDescriptionHandlerConfiguration
+    );
   };
 }
